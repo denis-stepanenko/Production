@@ -1,0 +1,73 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Production.Models;
+
+namespace Production.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RequestsController : ControllerBase
+    {
+        private readonly ProductionContext _context;
+
+        public RequestsController(ProductionContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery]int page)
+        {
+            if (page == 0)
+                return BadRequest();
+
+            var items = await _context.Requests
+                .Include(x => x.RepairType)
+                .PaginateAsync(page);
+
+            return Ok(items);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var item = await _context.Requests.FindAsync(id);
+
+            if (item is null)
+                return NotFound();
+
+            return Ok(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(Request item)
+        {
+            await _context.Requests.AddAsync(item);
+
+            return CreatedAtAction(nameof(Add), new { id = item.Id }, item);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Request item)
+        {
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var item = await _context.Requests.FindAsync(id);
+
+            if (item is null)
+                return NotFound();
+
+            _context.Requests.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}

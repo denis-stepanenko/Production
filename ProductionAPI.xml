@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Production</name>
+    </assembly>
+    <members>
+        <member name="M:Production.Controllers.CardsController.Update(Production.Models.Card)">
+            <response code="400">Если нарушены правила бизнес-логики</response>
+        </member>
+        <member name="M:Production.Controllers.OrdersController.Get(System.String)">
+            <summary>
+            Получить список заказов, в которые входит продукт
+            </summary>
+            <param name="productCode">Код продукта</param>
+            <returns></returns>
+        </member>
+        <member name="M:Production.Controllers.ProductRelationsController.Get(System.String,System.Int32)">
+            <summary>
+            Получить информацию о том, какие продукты входят в изделие, их количестве, маршруте
+            </summary>
+            <param name="code">Код изделия</param>
+            <param name="count">Количество изделия</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
